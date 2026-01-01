@@ -3,7 +3,7 @@ resource "azuread_user" "batman" {
   display_name        = "Batman"
   mail_nickname       = "batman"
 
-  password = "P@ssw0rd-Batman-123!"
+  password = "P@ssw0rd-junaid-123!"
 
   force_password_change = true
   account_enabled       = true
