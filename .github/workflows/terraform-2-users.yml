@@ -1,0 +1,56 @@
+name: Terraform - Create 2 Users
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "2-users/**"
+  workflow_dispatch:
+
+permissions:
+  id-token: write      # Required for OIDC login
+  contents: read       # Needed to fetch repo
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2️⃣ Azure login via OIDC
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      # 3️⃣ Setup Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+
+      # 4️⃣ Terraform Init
+      - name: Terraform Init
+        working-directory: 2-users
+        run: terraform init
+
+      # 5️⃣ Terraform Plan
+      - name: Terraform Plan
+        working-directory: 2-users
+        env:
+          TF_VAR_salman_password: ${{ secrets.SALMAN_PASSWORD }}
+          TF_VAR_amir_password: ${{ secrets.AMIR_PASSWORD }}
+        run: terraform plan
+
+      # 6️⃣ Terraform Apply
+      - name: Terraform Apply
+        working-directory: 2-users
+        env:
+          TF_VAR_salman_password: ${{ secrets.SALMAN_PASSWORD }}
+          TF_VAR_amir_password: ${{ secrets.AMIR_PASSWORD }}
+        run: terraform apply -auto-approve
