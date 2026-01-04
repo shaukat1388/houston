@@ -4,4 +4,5 @@ variable "users" {
     display_name = string
     password     = string
   }))
+  description = "Map of users to create"
 }
