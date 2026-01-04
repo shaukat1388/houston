@@ -1,9 +1,7 @@
-variable "salman_password" {
-  type      = string
-  sensitive = true
-}
-
-variable "amir_password" {
-  type      = string
-  sensitive = true
+variable "users" {
+  type = map(object({
+    upn          = string
+    display_name = string
+    password     = string
+  }))
 }

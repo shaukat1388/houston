@@ -1,7 +1,9 @@
-output "ironman_user_upn" {
-  value = azuread_user.ironman.user_principal_name
+variable "salman_password" {
+  type      = string
+  sensitive = true
 }
 
-output "ironman_user_object_id" {
-  value = azuread_user.ironman.id
+variable "amir_password" {
+  type      = string
+  sensitive = true
 }
