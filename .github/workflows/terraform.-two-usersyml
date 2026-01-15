@@ -2,7 +2,7 @@ name: Terraform Azure AD Users
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "task90" ]
   workflow_dispatch:
 
 permissions:
@@ -18,7 +18,8 @@ jobs:
       TF_VAR_amir_password: ${{ secrets.AMIR_PASSWORD }}
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Azure Login (OIDC)
         uses: azure/login@v2
@@ -27,8 +28,14 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - uses: hashicorp/setup-terraform@v3
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
 
-      - run: terraform init
-      - run: terraform plan
-      - run: terraform apply -auto-approve
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
